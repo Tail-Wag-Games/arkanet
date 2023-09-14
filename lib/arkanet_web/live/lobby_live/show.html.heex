@@ -1,0 +1,36 @@
+<.header>
+  Lobby <%= @lobby.id %>
+  <:subtitle>This is a lobby record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/lobbies/#{@lobby}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit lobby</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<!--<.list>
+  <:item title="Name"><%= @lobby.name %></:item>
+  <:item title="Host"><%= @host %></:item>
+  <:item title="Connected Users">
+    <ul>
+      <%= for uuid <- @connected_users do %>
+        <li><%= if uuid === @host_id do %><b><%= uuid %></b><% else %><%= uuid %><% end %> </li>
+      <% end %>
+   </ul>
+  </:item>
+</.list>-->
+
+<canvas width="600px" height="480px" class="game" id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+
+<.back navigate={~p"/lobbies"}>Back to lobbies</.back>
+
+<.modal :if={@live_action == :edit} id="lobby-modal" show on_cancel={JS.patch(~p"/lobbies/#{@lobby}")}>
+  <.live_component
+    module={ArkanetWeb.LobbyLive.FormComponent}
+    id={@lobby.id}
+    title={@page_title}
+    action={@live_action}
+    lobby={@lobby}
+    patch={~p"/lobbies/#{@lobby}"}
+  />
+</.modal>
